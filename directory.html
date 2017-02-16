@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+
+    <!-- Stylesheets -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="styles/directory.css" rel="stylesheet" />
+
+    <!-- Core Scripts -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+            integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-validation/2.0.3/knockout.validation.min.js" type="text/javascript"></script>
+
+    <!-- Custom Scripts -->
+    <script src="scripts/directory.js"></script>
+</head>
+<body>
+    <div id="provider-header">
+        <h1 class="directory-title">Provider Directory</h1>
+        <h4 class="directory-subtitle">v2.0</h4>
+    </div>
+
+    <div id="provider-container">
+        <!-- Create Provider -->
+        <div class="col-xs-12 col-md-3">
+            <div class="panel">
+                <div class="panel-body">
+                    <h4>Create Provider</h4>
+                    <div data-bind="template: { name: 'field-template', foreach: inputFields }"></div>
+
+                    <div class="submit-button">
+                        <button class="btn btn-primary" data-bind="click: submitClick">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Provider List -->
+        <div class="col-xs-12 col-md-9">
+            <div class="panel">
+                <div class="panel-body">
+                    <h4>Provider List</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Template for each of the input fields -->
+    <script id="field-template" type="text/html">
+        <div class="field-container">
+            <input type="text" class="field" required data-bind="attr: { 'placeholder': name }, value: value" />
+            <label class="floating-label" data-bind="text: name"></label>
+            <div class="field-underline"></div>
+        </div>
+    </script>
+
+</body>
+</html>
