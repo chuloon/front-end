@@ -16,6 +16,7 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.1/knockout-min.js" type="text/javascript"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout-validation/2.0.3/knockout.validation.min.js" type="text/javascript"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js" type="text/javascript"></script>
 
     <!-- Custom Scripts -->
     <script src="scripts/directory.js"></script>
@@ -28,7 +29,7 @@
 
     <div id="provider-container">
         <!-- Create Provider -->
-        <div class="col-xs-12 col-md-3">
+        <div id="create-provider" class="col-xs-12 col-md-3">
             <div class="panel">
                 <div class="panel-body">
                     <h4>Create Provider</h4>
@@ -42,19 +43,42 @@
         </div>
 
         <!-- Provider List -->
-        <div class="col-xs-12 col-md-9">
+        <div id="provider-list" class="col-xs-12 col-md-9">
             <div class="panel">
                 <div class="panel-body">
                     <h4>Provider List</h4>
+
+                    <div class="table-container">
+                        <table id="provider-table" class="table table-striped">
+                            <tbody data-bind="template: { name: 'provider-list-table', foreach: seedData }"></tbody>
+                        </table>
+                    </div>
+                    <div class="submit-button">
+                    <button class="btn btn-default pull-right" data-bind="click: submitClick">Remove</button></div>
                 </div>
             </div>
         </div>
     </div>
 
+    <script id="provider-list-table" type="text/html">
+        <tr>
+            <td class="provider-item">
+                <h4 class="name-style" data-bind="text: $data.last_name + ', ' + $data.first_name"></h4>
+                <span class="provider-email" data-bind="text: $data.email_address"></span>
+            </td>
+            <td>
+                <div class="provider-details">
+                    <h5 data-bind="text: $data.specialty"></h5>
+                    <span data-bind="text: $data.practice_name"></span>
+                </div>
+            </td>
+        </tr>
+    </script>
+
     <!-- Template for each of the input fields -->
     <script id="field-template" type="text/html">
         <div class="field-container">
-            <input type="text" class="field" required data-bind="attr: { 'placeholder': name }, value: value" />
+            <input type="text" class="field clearable" required data-bind="attr: { 'placeholder': name }, value: value" />
             <label class="floating-label" data-bind="text: name"></label>
             <div class="field-underline"></div>
         </div>

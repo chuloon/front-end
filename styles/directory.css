@@ -7,6 +7,10 @@ body {
     margin-bottom: 0px;
 }
 
+#create-provider .panel, #provider-list .panel {
+    height: 400px;
+}
+
 #provider-header {
     padding-left: 15px;
 }
@@ -38,11 +42,28 @@ input:focus {
     float: right;
 }
 
+.name-style {
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.table-container {
+    height: 250px;
+    overflow-y: scroll;
+}
+
+.provider-details {
+    text-align: right;
+}
+
+.provider-details h5 {
+    margin-bottom: 0px;
+}
+
 /* Floating label code source: http://nickplesha.github.io/post/floatinglabel.html */
 
 .field-container {
   position: relative;
-  max-width: 300px;
   margin-top:15px;
   font-family: 'Roboto', sans-serif;
 }
@@ -60,13 +81,13 @@ input:focus {
   color: transparent;
 }
 :focus::-moz-placeholder { /* Firefox 19+ */
-  color: pink;
+  color: transparent;
 }
 :focus:-ms-input-placeholder { /* IE 10+ */
-  color: pink;
+  color: transparent;
 }
 :focus:-moz-placeholder { /* Firefox 18- */
-  color: pink;
+  color: transparent;
 }
 
 .floating-label {
@@ -88,6 +109,18 @@ input:focus {
 }
 
 /* End floating label styles */
+
+/* Clearable fields source http://stackoverflow.com/questions/6258521/clear-icon-inside-input-text */
+
+.clearable{
+  background: #fff url(http://i.stack.imgur.com/mJotv.gif) no-repeat right -10px center;
+  transition: background 0.4s;
+}
+.clearable.x  { background-position: right 5px center; } /* (jQ) Show icon */
+.clearable.onX{ cursor: pointer; }              /* (jQ) hover cursor style */
+.clearable::-ms-clear {display: none; width:0; height:0;} /* Remove IE default X */
+
+/* End Clearable fields styles */
 
 /* Bootstrap Overrides */
 
