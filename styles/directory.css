@@ -74,12 +74,18 @@ input[type="search"]:focus {
     margin-bottom: 0px;
 }
 
+.form-container {
+    height: 280px;
+    overflow-y: scroll;
+}
+
 /* Floating label code source: http://nickplesha.github.io/post/floatinglabel.html */
 
 .field-container {
   position: relative;
   margin-top:15px;
   font-family: 'Roboto', sans-serif;
+  width: 380px;
 }
 .field {
   display:block;

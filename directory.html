@@ -3,7 +3,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="utf-8" />
-    <title></title>
+    <title>Provider Directory</title>
 
     <!-- Core Scripts -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"
@@ -36,7 +36,7 @@
             <div class="panel">
                 <div class="panel-body">
                     <h4>Create Provider</h4>
-                    <div data-bind="template: { name: 'field-template', foreach: inputFields }"></div>
+                    <div class="form-container" data-bind="template: { name: 'field-template', foreach: inputFields }"></div>
 
                     <div class="submit-button">
                         <button class="btn btn-primary" data-bind="click: submitClick">Submit</button>
@@ -55,8 +55,8 @@
                         <table id="provider-table" class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Provider Name</th>
-                                    <th class="pull-right">Provider Specialty</th>
+                                    <th>Provider Name/Email</th>
+                                    <th class="pull-right">Provider Specialty/Practice</th>
                                 </tr>
                             </thead>
                             <tbody data-bind="template: { name: 'provider-list-table', foreach: seedData }"></tbody>

@@ -12,19 +12,11 @@ $(document).ready(function () {
         }
     });
 
-    $('#provider-table tr').click(function () {
+    $('#provider-table tbody').on('click', 'tr', function () {
         selectItem(this);
         $(this).toggleClass('selected-row');
     });
 });
-
-function selectedObject() {
-    last_name = "",
-    first_name = "",
-    email_address = "",
-    specialty = "",
-    practice_name = ""
-};
 
 selectedItems = [];
 
@@ -62,7 +54,13 @@ $(document).on('input', '.clearable', function () {
     $(this).removeClass('x onX').val('').change();
 });
 
-
+ko.validation.init({
+    grouping: {
+        deep: true,
+        live: true,
+        observable: true
+    }
+});
 
 function directoryViewModel() {
     this.seedData = ko.observableArray([
@@ -87,8 +85,50 @@ function directoryViewModel() {
         { name: 'Practice Name', value: ko.observable().extend({ required: false }) },
     ];
 
+    this.errors = ko.validation.group(this.inputFields);
+
+    ko.validation.rules.pattern.message = 'Invalid.';
+
     this.submitClick = () => {
-        debugger;
+        if (this.errors().length > 0)
+            this.errors.showAllMessages();
+        else {
+            let pushItem = this.buildItem();
+
+            let providerInfo = "<h4 class=\"name-style\">" + pushItem.last_name + ', ' + pushItem.first_name + "</h4>\
+                <span class=\"provider-email\">" + pushItem.email_address + "</span>";
+
+            let providerSpec = "<div class=\"provider-details\">\
+                                    <h5>" + pushItem.specialty + "</h5>\
+                                    <span>" + pushItem.practice_name + "</span>\
+                                </div>";
+
+            table.row.add([providerInfo, providerSpec], 0).draw();
+
+            table = $('#provider-table').DataTable({
+                "bPaginate": false,
+                "sScrollY": 200,
+                "order": [],
+                "language": {
+                    "emptyTable": ""
+                },
+                "destroy": true
+            });
+        }
+    }
+
+    this.buildItem = () => {
+        let retItem = {
+            "last_name": this.inputFields[0].value(),
+            "first_name": this.inputFields[1].value(),
+            "email_address": this.inputFields[2].value(),
+            "specialty": this.inputFields[3].value() != undefined ? this.inputFields[3].value() : '',
+            "practice_name": this.inputFields[4].value() != undefined ? this.inputFields[4].value() : '',
+        };
+
+        this.seedData.push(retItem);
+
+        return retItem;
     }
 
     this.removeClick = () => {
