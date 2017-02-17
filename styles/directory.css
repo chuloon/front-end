@@ -33,6 +33,21 @@ input:focus {
     border-bottom-color: #03a9f4;
 }
 
+input[type="search"] {
+    border: none;
+    border-bottom: 1px solid black;
+    box-shadow: none;
+    border-radius: 0px;
+}
+
+input[type="search"]:focus {
+    box-shadow: none;
+}
+
+#provider-table .selected-row {
+    background-color: rgba(0,0,0,0.2);
+}
+
 .validationMessage {
     color: red;
 }
@@ -47,9 +62,8 @@ input:focus {
     margin-bottom: 0px;
 }
 
-.table-container {
-    height: 250px;
-    overflow-y: scroll;
+.dataTables_info {
+    display: none;
 }
 
 .provider-details {
