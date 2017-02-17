@@ -1,9 +1,15 @@
+var table;
+
 $(document).ready(function () {
     ko.applyBindings(new directoryViewModel());
 
-    $('#provider-table').DataTable({
+    table = $('#provider-table').DataTable({
         "bPaginate": false,
-        "sScrollY": 200
+        "sScrollY": 200,
+        "order": [],
+        "language": {
+            "emptyTable": ""
+        }
     });
 
     $('#provider-table tr').click(function () {
@@ -28,7 +34,7 @@ selectItem = (data) => {
         retData = $(data)[0].innerText.split('\n')
     }
 
-    let retObject = new selectedObject();
+    let retObject = {};
     retObject.last_name = retData[0].split(', ')[0];
     retObject.first_name = retData[0].split(', ')[1];
     retObject.email_address = retData[1].trim();
@@ -59,13 +65,18 @@ $(document).on('input', '.clearable', function () {
 
 
 function directoryViewModel() {
-    this.seedData = [
+    this.seedData = ko.observableArray([
     { "last_name": "Harris", "first_name": "Mike", "email_address": "mharris@updox.com", "specialty": "Pediatrics", "practice_name": "Harris Pediatrics" },
     { "last_name": "Wijoyo", "first_name": "Bimo", "email_address": "bwijoyo@updox.com", "specialty": "Podiatry", "practice_name": "Wijoyo Podiatry" },
     { "last_name": "Rose", "first_name": "Nate", "email_address": "nrose@updox.com", "specialty": "Surgery", "practice_name": "Rose Cutters" },
     { "last_name": "Carlson", "first_name": "Mike", "email_address": "mcarlson@updox.com", "specialty": "Orthopedics", "practice_name": "Carlson Orthopedics" },
     { "last_name": "Witting", "first_name": "Mike", "email_address": "mwitting@updox.com", "specialty": "Pediatrics", "practice_name": "Witting's Well Kids Pediatrics" },
     { "last_name": "Juday", "first_name": "Tobin", "email_address": "tjuday@updox.com", "specialty": "General Medicine", "practice_name": "Juday Family Practice" }
+    ]);
+
+    this.testData = [
+        { "last_name": "Carlson", "first_name": "Mike", "email_address": "mcarlson@updox.com", "specialty": "Orthopedics", "practice_name": "Carlson Orthopedics" },
+        { "last_name": "Witting", "first_name": "Mike", "email_address": "mwitting@updox.com", "specialty": "Pediatrics", "practice_name": "Witting's Well Kids Pediatrics" }
     ];
 
     this.inputFields = [
@@ -73,10 +84,28 @@ function directoryViewModel() {
         { name: 'First Name', value: ko.observable().extend({ required: true }) },
         { name: 'Email', value: ko.observable().extend({ required: true, email: true }) },
         { name: 'Specialty', value: ko.observable().extend({ required: false }) },
-        { name: 'Practice Name', value: ko.observable().extend({ required: false}) },
+        { name: 'Practice Name', value: ko.observable().extend({ required: false }) },
     ];
 
     this.submitClick = () => {
         debugger;
+    }
+
+    this.removeClick = () => {
+        this.removeRows();
+    }
+
+    this.removeRows = () => {
+        table.rows('.selected-row').remove().draw();
+        $('tr:has(td.dataTables_empty)').css('display', 'none');
+
+        $.each(selectedItems, (index, item) => {
+            $.each(this.seedData(), (i, x) => {
+                if (JSON.stringify(item) == JSON.stringify(x)) {
+                    this.seedData.splice(index, 1);
+                    return false;
+                }
+            });
+        });
     }
 }
