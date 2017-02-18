@@ -1,8 +1,10 @@
 var table;
 
 $(document).ready(function () {
+    //Start view model
     ko.applyBindings(new directoryViewModel());
 
+    //Initialize data table
     table = $('#provider-table').DataTable({
         "bPaginate": false,
         "sScrollY": 200,
@@ -12,10 +14,29 @@ $(document).ready(function () {
         }
     });
 
+    //Add on click listener for selected rows
     $('#provider-table tbody').on('click', 'tr', function () {
         selectItem(this);
         $(this).toggleClass('selected-row');
     });
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "newestOnTop": false,
+        "progressBar": true,
+        "positionClass": "toast-bottom-center",
+        "preventDuplicates": true,
+        "onclick": null,
+        "showDuration": "300",
+        "hideDuration": "1000",
+        "timeOut": "5000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
 });
 
 selectedItems = [];
@@ -26,6 +47,7 @@ selectItem = (data) => {
         retData = $(data)[0].innerText.split('\n')
     }
 
+    //Serialize the array into an object
     let retObject = {};
     retObject.last_name = retData[0].split(', ')[0];
     retObject.first_name = retData[0].split(', ')[1];
@@ -33,6 +55,7 @@ selectItem = (data) => {
     retObject.specialty = retData[2];
     retObject.practice_name = retData[3];
 
+    //If it has the selected-row class, push it into selectedItems. else, remove it from selectedItems
     if (!$(data).hasClass('selected-row'))
         selectedItems.push(retObject);
     else {
@@ -44,6 +67,7 @@ selectItem = (data) => {
     }
 }
 
+//Script for clearable fields
 function tog(v) { return v ? 'addClass' : 'removeClass'; }
 $(document).on('input', '.clearable', function () {
     $(this)[tog(this.value)]('x');
@@ -90,8 +114,12 @@ function directoryViewModel() {
     ko.validation.rules.pattern.message = 'Invalid.';
 
     this.submitClick = () => {
-        if (this.errors().length > 0)
+
+        //If there are errors, show all errors and pop a toast. else, continue with the submit.
+        if (this.errors().length > 0) {
             this.errors.showAllMessages();
+            toastr["error"]("Invalid fields detected");
+        }
         else {
             let pushItem = this.buildItem();
 
@@ -103,8 +131,10 @@ function directoryViewModel() {
                                     <span>" + pushItem.practice_name + "</span>\
                                 </div>";
 
-            table.row.add([providerInfo, providerSpec], 0).draw();
+            //Add the newly formed row into the data table
+            table.row.add([providerInfo, providerSpec]).draw();
 
+            //Reinitialize the data table
             table = $('#provider-table').DataTable({
                 "bPaginate": false,
                 "sScrollY": 200,
@@ -114,6 +144,15 @@ function directoryViewModel() {
                 },
                 "destroy": true
             });
+
+            //Clear out the form on submit
+            $.each(this.inputFields, (index, item) => {
+                item.value('');
+            });
+
+            //Hide errors and pop a success toast
+            this.errors.showAllMessages(false);
+            toastr["success"]("Record added!");
         }
     }
 
@@ -136,9 +175,11 @@ function directoryViewModel() {
     }
 
     this.removeRows = () => {
+        //Remove the selected rows from the data table
         table.rows('.selected-row').remove().draw();
         $('tr:has(td.dataTables_empty)').css('display', 'none');
 
+        //Remove the selected rows from the seedData
         $.each(selectedItems, (index, item) => {
             $.each(this.seedData(), (i, x) => {
                 if (JSON.stringify(item) == JSON.stringify(x)) {
